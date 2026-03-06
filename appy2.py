@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from bcb import sgs, Expectativas
 import time
 
@@ -207,7 +207,8 @@ def get_data():
                 df["PIB_12M"] = df["PIB_Mensal_Raw"].rolling(window=12).sum()
             
             if not df.empty: return df
-        except Exception:
+        except Exception as e:
+            print(f"Erro em get_data: {e}")
             time.sleep(1)
             continue
     return pd.DataFrame()
@@ -562,4 +563,5 @@ elif nav == "Glossário":
     with c4: gloss_card("Pré-fixado", "Taxa fixa combinada na compra. Você sabe exatamente quanto vai receber.", C_ACCENT)
     with c5: gloss_card("Híbrido (IPCA+)", "Parte fixa + Inflação. Garante ganho real acima da inflação.", C_IPCA)
     st.markdown("---"); st.caption("Fonte: Banco Central do Brasil.")
+
 
