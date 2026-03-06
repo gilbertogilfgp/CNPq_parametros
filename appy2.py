@@ -183,34 +183,32 @@ st.markdown(f"""
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def get_data():
-    """
-    Busca dados históricos do SGS (Série Histórica/Passado).
-    """
     for attempt in range(3):
         try:
             hoje = date.today() - timedelta(days=1)
             start = (hoje - timedelta(days=365*10)).strftime("%Y-%m-%d")
-            
-            # CÓDIGOS SGS:
-            # 4380: PIB Mensal (R$ Milhões) - Série oficial de valores correntes
+
             codigos = {
-                "Selic": 432, 
-                "IPCA": 13522, 
-                "IGPM": 13521, 
-                "Dolar": 1, 
-                "PIB_Mensal_Raw": 4380 
+                "Selic": 432,
+                "IPCA": 13522,
+                "IGPM": 13521,
+                "Dolar": 1,
+                "PIB_Mensal_Raw": 4380
             }
+
             df = sgs.get(codigos, start=start).ffill().dropna()
-            
-            # Calcula o PIB Acumulado 12 Meses para o GRÁFICO
+
             if not df.empty and "PIB_Mensal_Raw" in df.columns:
                 df["PIB_12M"] = df["PIB_Mensal_Raw"].rolling(window=12).sum()
-            
-            if not df.empty: return df
+
+            if not df.empty:
+                return df
+
         except Exception as e:
             print(f"Erro em get_data: {e}")
             time.sleep(1)
             continue
+
     return pd.DataFrame()
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -563,5 +561,6 @@ elif nav == "Glossário":
     with c4: gloss_card("Pré-fixado", "Taxa fixa combinada na compra. Você sabe exatamente quanto vai receber.", C_ACCENT)
     with c5: gloss_card("Híbrido (IPCA+)", "Parte fixa + Inflação. Garante ganho real acima da inflação.", C_IPCA)
     st.markdown("---"); st.caption("Fonte: Banco Central do Brasil.")
+
 
 
