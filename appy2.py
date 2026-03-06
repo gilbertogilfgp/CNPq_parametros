@@ -188,7 +188,7 @@ def get_data():
     """
     for attempt in range(3):
         try:
-            hoje = datetime.today()
+            hoje = date.today() - timedelta(days=1)
             start = (hoje - timedelta(days=365*10)).strftime("%Y-%m-%d")
             
             # CÓDIGOS SGS:
@@ -562,3 +562,4 @@ elif nav == "Glossário":
     with c4: gloss_card("Pré-fixado", "Taxa fixa combinada na compra. Você sabe exatamente quanto vai receber.", C_ACCENT)
     with c5: gloss_card("Híbrido (IPCA+)", "Parte fixa + Inflação. Garante ganho real acima da inflação.", C_IPCA)
     st.markdown("---"); st.caption("Fonte: Banco Central do Brasil.")
+
